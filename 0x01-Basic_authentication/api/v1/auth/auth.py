@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Define auth class that mange authentication"""
 
 from flask import request
