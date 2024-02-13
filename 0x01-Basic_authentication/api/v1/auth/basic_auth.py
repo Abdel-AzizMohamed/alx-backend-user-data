@@ -2,7 +2,10 @@
 """Define basic_auth class that mange basic authentication"""
 import base64
 import binascii
+from typing import TypeVar
+
 from api.v1.auth.auth import Auth
+from models.user import User
 
 
 class BasicAuth(Auth):
@@ -35,3 +38,31 @@ class BasicAuth(Auth):
         except (binascii.Error, UnicodeDecodeError):
             return None
         return decode_64.decode("utf-8")
+
+    def extract_user_credentials(
+        self, decoded_base64_authorization_header: str
+    ) -> (str, str):
+        """returns the user email and password from the Base64 decoded value"""
+        if decoded_base64_authorization_header is None:
+            return (None, None)
+        if not isinstance(decoded_base64_authorization_header, str):
+            return (None, None)
+        if decoded_base64_authorization_header.find(":") == -1:
+            return (None, None)
+        return tuple(decoded_base64_authorization_header.split(":"))
+
+    def user_object_from_credentials(
+        self, user_email: str, user_pwd: str
+    ) -> TypeVar("User"):
+        """returns the User instance based on his email and password."""
+        if user_email is None or user_pwd is None:
+            return None
+        try:
+            users = User.search({"email": user_email})
+        except Exception:
+            return None
+        if len(users) <= 0:
+            return None
+        if users[0].is_valid_password(user_pwd):
+            return users[0]
+        return None
