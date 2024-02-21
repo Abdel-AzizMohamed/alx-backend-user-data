@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Define a users model"""
 
 from sqlalchemy.ext.declarative import declarative_base
