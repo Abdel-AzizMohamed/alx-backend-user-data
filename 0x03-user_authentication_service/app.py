@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """app start point"""
-from sqlalchemy.exc import NoResultFound
 from flask import Flask, jsonify, request
 from auth import Auth
 
