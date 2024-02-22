@@ -59,7 +59,8 @@ def logout() -> str:
     """DELETE / sessions
 
     Return:
-        -
+        - Logout user by destroying session id
+        - redirect to home route
     """
     session_id = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(session_id)
@@ -69,6 +70,22 @@ def logout() -> str:
 
     AUTH.destroy_session(user.id)
     return redirect(url_for("index"))
+
+
+@app.route("/profile", methods=["GET"], strict_slashes=False)
+def profile() -> str:
+    """GET / profile
+
+    Return:
+        - User email payload if it logged in else 403 state code
+    """
+    session_id = request.cookies.get("session_id")
+    user = AUTH.get_user_from_session_id(session_id)
+
+    if user is None:
+        abort(403)
+
+    return jsonify({"email": user.email})
 
 
 if __name__ == "__main__":
