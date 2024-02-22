@@ -16,7 +16,11 @@ def index():
 
 @app.route("/users", methods=["POST"], strict_slashes=False)
 def users() -> str:
-    """Define a user auth route"""
+    """POST / users
+
+    Return:
+        - The account creation payload
+    """
     email = request.form.get("email")
     password = request.form.get("password")
 
@@ -27,9 +31,13 @@ def users() -> str:
         return jsonify({"message": "email already registered"}), 400
 
 
-@app.route("/login", methods=["POST"], strict_slashes=False)
+@app.route("/sessions", methods=["POST"], strict_slashes=False)
 def login() -> str:
-    """Define a login route"""
+    """POST / sessions
+
+    Return:
+        - The account login payload
+    """
     email = request.form.get("email")
     password = request.form.get("password")
 
